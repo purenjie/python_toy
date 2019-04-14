@@ -22,7 +22,7 @@ if __name__ == '__main__':
     filename = sys.argv[1] + '.md'
 
     # 不存在 tag_dir 时创建
-    dir_path = '/home/solejay/program/algorithm_leetcode/' + tag_dir
+    dir_path = '/home/solejay/program/python_toy/LeetCode刷题笔记/' + tag_dir
     if os.path.exists(dir_path):
         pass
     else:
@@ -40,10 +40,9 @@ if __name__ == '__main__':
         step = ['原题目', '思路', '第一遍解法', '网上好的解法',
                 '自己可以改进的地方', '最简代码', '获得的思考']
         step = h4_title(step)
-        problem_type = '**难度**'
         code_input = '```python\n```'
         
-        write_content = [step[0], problem_type, step[1], 
+        write_content = [step[0], step[1], 
                         step[2], code_input, step[3], code_input, 
                         step[4], code_input, step[5], code_input, step[6]]
 

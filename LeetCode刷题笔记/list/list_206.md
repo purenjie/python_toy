@@ -1,6 +1,4 @@
-#### 原题目
-
-**普通题目**
+#### 原题目(简单——1)
 
 Reverse a singly linked list.
 
