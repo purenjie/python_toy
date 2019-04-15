@@ -38,13 +38,13 @@ if __name__ == '__main__':
         print('文件已存在！')
     else:
         step = ['原题目', '思路', '第一遍解法', '网上好的解法',
-                '自己可以改进的地方', '最简代码', '获得的思考']
+                '自己可以改进的地方\n', '最简代码', '获得的思考']
         step = h4_title(step)
         code_input = '```python\n```'
         
         write_content = [step[0], step[1], 
                         step[2], code_input, step[3], code_input, 
-                        step[4], code_input, step[5], code_input, step[6]]
+                        step[4], step[5], code_input, step[6]]
 
         write_content = br(write_content)
 
