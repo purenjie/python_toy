@@ -1,12 +1,10 @@
+import sys
 import requests
 from lxml import html
 
-url = 'http://www.weather.com.cn/weather/101091101.shtml'
-
-content = requests.get(url).content
-sel = html.fromstring(content)
-top = sel.xpath('//ul[@class="t clearfix"]')[0] # 忘记写 [0] top 类型为list
-suggestions = sel.xpath('//ul[@class="clearfix"]')[0]
+def get_content(code='101091101'):
+    url = 'http://www.weather.com.cn/weather/%s.shtml' % code
+    return requests.get(url).content
 
 # 生活指数
 def shzs():
@@ -33,31 +31,51 @@ def shzs():
         l.append(t)
     return l
 
-
+# 获取温度
 def get_tem(top, index):
     tem_low = top.xpath('li[%d]/p[@class="tem"]/i/text()' % index)[0]
     if len(top.xpath('li[%d]/p[@class="tem"]/span' % index)) != 0:
-        tem_high = top.xpath('li[%d]/p[@class="tem"]/span/text()' % i)[0] + '℃'
+        tem_high = top.xpath('li[%d]/p[@class="tem"]/span/text()' % index)[0] + '℃'
         return tem_low + ' ~' + tem_high
     else:
         return tem_low
 
+# 预测未来几天的天气和生活指数
+def predict_days(days):
+    for i in range(1, days+1):
+        # 日期
+        date = top.xpath('li[%d]/h1/text()' % i)[0]
+        # 天气
+        weather = top.xpath('li[%d]/p[@class="wea"]/text()' % i)[0]
+        # 温度
+        tem = get_tem(top, i)
+        # 风力
+        wind = top.xpath('li[%d]/p[@class="win"]/i/text()' % i)[0]
+        print("日期：%s\n天气：%s\n温度：%s\n风力：%s" % (date, weather, tem, wind))
+        
+        life_condition = shzs() 
+        for index in range(3):
+            print(life_condition[i-1][index])
+        print('==============================================')
 
-for i in range(1, 7+1):
-    # 日期
-    date = top.xpath('li[%d]/h1/text()' % i)[0]
-    # 天气
-    weather = top.xpath('li[%d]/p[@class="wea"]/text()' % i)[0]
-    # 温度
-    tem = get_tem(top, i)
-    # 风力
-    wind = top.xpath('li[%d]/p[@class="win"]/i/text()' % i)[0]
-    print("日期：%s\n天气：%s\n温度：%s\n风力：%s" % (date, weather, tem, wind))
-    
-    life_condition = shzs() 
-    for index in range(3):
-        print(life_condition[i-1][index])
-    print('==============================================')
+if __name__ == "__main__":
+
+    city = {
+        "秦皇岛":'101091101',
+        "淄川":'101120302',
+        "北京":'101010100'
+    }
+
+    if len(sys.argv) == 2:
+        city_code = city[sys.argv[1]]
+        content = get_content(city_code)
+    else:
+        content = get_content()
+    sel = html.fromstring(content)
+    top = sel.xpath('//ul[@class="t clearfix"]')[0] # 忘记写 [0] top 类型为list
+    suggestions = sel.xpath('//ul[@class="clearfix"]')[0]
+
+    predict_days(7)
 
     
 
